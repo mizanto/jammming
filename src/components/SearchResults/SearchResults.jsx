@@ -6,6 +6,7 @@ export default function SearchResults({ tracks, onAdd }) {
     return (
       <Box
         sx={{
+          height: "92%",
           padding: 2,
           border: "1px solid #ddd",
           borderRadius: 1,

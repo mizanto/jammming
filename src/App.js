@@ -1,12 +1,39 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import { Box, Typography } from '@mui/material';
+import { getTokenFromUrl } from "./services/SpotifyAuth";
 import SearchBarContainer from "./components/SearchBar/SearchBarContainer";
 import SearchResultsContainer from "./components/SearchResults/SearchResultsContainer";
 import PlaylistContainer from "./components/Playlist/PlaylistContainer";
+import AuthButton from "./components/AuthButton/AuthButton";
+import axios from "axios";
 
 function App() {
   const [searchResults, setSearchResults] = useState([]);
   const [playlistTracks, setPlaylistTracks] = useState([]);
+  const [authToken, setAuthToken] = useState(null);
+  const [userProfile, setUserProfile] = useState(null);
+
+  useEffect(() => {
+    const token = getTokenFromUrl().access_token;
+    if (token) {
+      console.log("Access token:", token);
+      setAuthToken(token);
+
+      axios
+        .get("https://api.spotify.com/v1/me", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then((response) => {
+          const profile = response.data
+          console.log("User Profile:", profile);
+          setUserProfile(profile);
+        })
+        .catch((error) => console.error("Error fetching user profile:", error));
+    }
+    window.location.hash = "";
+  }, []);
 
   const handleSearch = (query) => {
     console.log("Search for:", query);
@@ -46,9 +73,37 @@ function App() {
         height: "100vh",
       }}
     >
-      <Typography variant="h2" sx={{ textAlign:"center", fontWeight:'bold'}}>
-        Ja<span style={{color:'#1976d2'}}>mmm</span>ing
-      </Typography>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          padding: 2,
+        }}
+      >
+        <Typography variant="h3" sx={{ fontWeight: "bold" }}>
+          Ja<span style={{ color: "#1976d2" }}>mmm</span>ing
+        </Typography>
+        <Box>
+          {authToken && userProfile ? (
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                padding: 2,
+              }}
+            >
+              <img src={userProfile.images[0].url} style={{ height: 30, width: 30, margin: 8, borderRadius: 15 }}/>
+              <Typography variant="body1" sx={{ fontWeight: "bold" }}>
+                {userProfile.display_name}
+              </Typography>
+            </Box>
+          ) : (
+            <AuthButton />
+          )}
+        </Box>
+      </Box>
       <Box 
         sx={{ 
           border: "1px solid #ddd",

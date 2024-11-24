@@ -46,9 +46,6 @@ export default function Playlist({
         onChange={onNameChange}
         sx={{ marginBottom: 2 }}
       />
-      <Typography variant="h6" sx={{ marginBottom: 2 }}>
-        Your Playlist
-      </Typography>
       <List
         sx={{
           flex: 1,

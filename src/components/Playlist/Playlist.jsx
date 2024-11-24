@@ -32,12 +32,16 @@ export default function Playlist({
         display: "flex",
         flexDirection: "column",
         height: "92%",
+        overflowY: "auto",
         padding: 2,
         border: "1px solid #ddd",
         borderRadius: 1,
         backgroundColor: "#f9f9f9",
       }}
     >
+      <Typography variant="h6" sx={{ marginBottom: 2 }}>
+        Playlist
+      </Typography>
       <TextField
         fullWidth
         variant="outlined"

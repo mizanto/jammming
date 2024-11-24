@@ -1,11 +1,20 @@
-import React from "react";
-import { getAuthUrl } from "../../services/SpotifyAuth";
+import React, { useEffect } from "react";
+import { Spotify } from "../../services/Spotify";
 import { Button } from "@mui/material";
 
-export default function AuthButton() {
+export default function AuthButton({ onAuthSuccess }) {
+  useEffect(() => {
+    const token = Spotify.extractTokenFromUrl();
+    if (token) {
+      console.log("Token successfully set:", token);
+      if (onAuthSuccess) {
+        onAuthSuccess(token);
+      }
+    }
+  }, []);
+  
   const handleLogin = () => {
-    const authUrl = getAuthUrl();
-    window.location.href = authUrl;
+    window.location.href = Spotify.getAuthUrl();
   };
 
   return (

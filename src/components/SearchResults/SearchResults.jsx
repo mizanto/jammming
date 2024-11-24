@@ -10,6 +10,7 @@ export default function SearchResults({ tracks, onAdd }) {
           padding: 2,
           border: "1px solid #ddd",
           borderRadius: 1,
+          overflowY: "auto",
           backgroundColor: "#f9f9f9",
         }}
       >
